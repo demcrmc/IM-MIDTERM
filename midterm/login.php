@@ -96,70 +96,137 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register'])) {
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #e3f2fd; /* Light blue background */
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: linear-gradient(270deg, #73a5ff, #5476b3, #ff8a73, #e3f2fd);
+            background-size: 800% 800%;
+            animation: gradientAnimation 15s ease infinite;
         }
+
+        /* Gradient background animation */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .container {
-            margin-top: 100px; /* Space from the top */
-            background-color: #ffffff; /* White background for the form */
-            padding: 30px; /* Inner spacing */
-            border-radius: 10px; /* Rounded corners */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Shadow effect */
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            color: #333;
+            animation: fadeInUp 1.2s ease;
         }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         h3 {
-            color: #007bff; 
-            font-weight: 600; /* Bold header */
+            color: #007bff;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
         }
+
         .btn-primary {
-            background-color: #1e88e5; /* Primary button color */
-            border: none; /* Remove border */
-            transition: background-color 0.3s; /* Smooth transition */
+            background-color: #007bff;
+            border: none;
+            transition: all 0.3s;
         }
         .btn-primary:hover {
-            background-color: #1565c0; /* Darker blue on hover */
+            background-color: #0056b3;
+            transform: scale(1.05);
         }
-        .form-label {
-            color: #333;
+
+        .form-control, .form-select {
+            transition: all 0.3s;
+            border-radius: 8px;
         }
-        .alert {
-            margin-top: 20px; /* Space above alerts */
-            font-weight: 400; /* Normal font weight for alerts */
+        .form-control:focus, .form-select:focus {
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+            border-color: #007bff;
         }
-        #registrationError {
-            margin-top: 10px; /* Space for registration error */
-        }
-        .modal-header {
-            background-color: #e3f2fd; /* Light blue modal header */
+
+        .modal-header, .modal-content {
+            background-color: #f0f4f8;
+            border: none;
         }
         .modal-title {
-            color: #007bff; /* Title color */
+            color: #007bff;
+        }
+        .alert {
+            font-weight: 400;
+        }
+
+        #registrationError {
+            color: #e74c3c;
+        }
+        .form-label {
+            color: #555;
+        }
+
+        .link-animation {
+            color: #007bff;
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s;
+        }
+        .link-animation:hover {
+            color: #0056b3;
+        }
+        .link-animation::after {
+            content: "";
+            width: 100%;
+            height: 2px;
+            background-color: #007bff;
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            transition: transform 0.3s;
+            transform: scaleX(0);
+            transform-origin: right;
+        }
+        .link-animation:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-4">
-            <h3 class="text-center">LOGIN</h3>
-            <?php if ($error) : ?>
-                <div class="alert alert-danger"><?php echo $error; ?></div>
-            <?php endif; ?>
-            <form method="post" action="login.php">
-                <input type="hidden" name="login" value="1">
-                <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" name="username" placeholder="Username" required>
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" name="password" placeholder="Password" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
-                <p class="mt-3 text-center">
-                    Wa kay account mala ka?<a href="#" data-bs-toggle="modal" data-bs-target="#registerModal">pag himo oy animal</a>
-                </p>
-            </form>
+    <h3 class="text-center">LOGIN</h3>
+    <?php if ($error) : ?>
+        <div class="alert alert-danger"><?php echo $error; ?></div>
+    <?php endif; ?>
+    <form method="post" action="login.php">
+        <input type="hidden" name="login" value="1">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" name="username" placeholder="Enter your username" required>
         </div>
-    </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" name="password" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+        <p class="mt-3 text-center">
+            Don't have an account? <a href="#" class="link-animation" data-bs-toggle="modal" data-bs-target="#registerModal">Click here</a>
+        </p>
+    </form>
 </div>
 
 <!-- Registration Modal -->
@@ -167,7 +234,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register'])) {
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="registerModalLabel">PAGHIMO DIRI NIMALA KA</h5>
+                <h5 class="modal-title" id="registerModalLabel">Create Account</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -191,12 +258,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register'])) {
                     <div class="mb-3">
                         <label for="gender" class="form-label">Gender</label>
                         <select class="form-select" name="gender" required>
-                            <option value="" disabled selected>UNSAY COLOR NIMO</option>
-                            <option value="male">YOYOT</option>
-                            <option value="female">MAGTUTUDLO</option>
-                            <option value="female">KIKI</option>
-                            <option value="female">EBAY</option>
-                            <option value="other">Other</option>
+                            <option value="" disabled selected></option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -215,7 +279,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register'])) {
                             <option value="admin">Admin</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">SGE DAYUN </button>
+                    <button type="submit" class="btn btn-primary w-100">Register</button>
                     <div id="registrationError" class="text-danger mt-3"></div>
                 </form>
             </div>
